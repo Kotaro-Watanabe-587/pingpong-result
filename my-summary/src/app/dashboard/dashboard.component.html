@@ -1,0 +1,83 @@
+<div class="main">
+    @if(!isDispResult){
+        <button (click)="setDisplayData()">display</button>
+    }
+
+    @if(isDispResult){
+        <p-table [value]="displayDataAry" [tableStyle]="{ 'max-width': '90vw','margin': 'auto' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>試合数</th>
+                    <th>勝ち数</th>
+                    <th>負け数</th>
+                    <th>勝率</th>
+                    <th>獲得ゲーム数</th>
+                    <th>喪失ゲーム数</th>
+                    <th>獲得ポイント数</th>
+                    <th>喪失ポイント数</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data>
+                <tr>
+                    <td>{{data.totalMatch}}</td>
+                    <td>{{data.totalWinMatch}}</td>
+                    <td>{{data.totalLoseMatch}}</td>
+                    <td>{{data.PerOfWin}}</td>
+                    <td>{{data.totalWinGame}}</td>
+                    <td>{{data.totalLoseGame}}</td>
+                    <td>{{data.totalRunsScored}}</td>
+                    <td>{{data.totalRuns}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    
+        <!-- <p-chart type="bar" [data]="dispGameRatioGraph" [options]="chartOption"></p-chart> -->
+        <p-chart type="bar" [data]="dispGameRatioGraph" [options]="gameRatioChartOption" width="90vw" height="300px"></p-chart>
+    
+        <div class="score-pie">
+            <p-chart type="pie" [data]="dispScoreDifferenceWinGraph" [options]="scoreDiffWinChartOption" width="40vw" height="300px"></p-chart>
+            <p-chart type="pie" [data]="dispScoreDifferenceLoseGraph" [options]="scoreDiffLoseChartOption" width="40vw" height="300px"></p-chart>
+        </div>
+        
+        <p-card header="ラリー詳細" [style]="{ 'max-width': '90vw', 'margin': '20px auto'}">
+            <p class="m-0">
+                試合毎平均サービスエース数：{{totalServeScore / (displayData.totalWinGame + displayData.totalLoseGame === 0 ? 1 : displayData.totalWinGame + displayData.totalLoseGame)}}
+            </p>
+            <p class="m-0">
+                試合毎平均レシーブエース数：{{totalReceiveScore / (displayData.totalWinGame + displayData.totalLoseGame === 0 ? 1 : displayData.totalWinGame + displayData.totalLoseGame)}}
+            </p>
+            <p class="m-0">
+                得点毎平均ラリー数：{{numOfTotalRally / (displayData.totalRunsScored + displayData.totalRuns === 0 ? 1 : displayData.totalRunsScored + displayData.totalRuns)}}
+            </p>
+            <p class="m-0">
+                サービス時ポイント獲得率：{{servicePoint.win / (servicePoint.win + servicePoint.lose === 0 ? 1 : servicePoint.win + servicePoint.lose) * 100}}%
+            </p>
+            <p class="m-0">
+                レシーブ時ポイント獲得率：{{receivePoint.win / (receivePoint.win + receivePoint.lose === 0 ? 1 : receivePoint.win + receivePoint.lose) * 100}}%
+            </p>
+        </p-card>
+        <!-- <div>
+            @for (match of matchInfoList; track match){
+                <p>{{match.opponent.racket}}</p>
+                <p>{{match.opponent.fore}}</p>
+                <p>{{match.opponent.back}}</p>
+                @for (game of match.gameList; track game) {
+                    {{game.isServe}}:{{game.gameCount}}
+                }
+            }
+        </div> -->
+    }
+    @else {
+        <h3>get PingPong match result</h3>
+        <h3>let's click "display" button!</h3>
+    }
+</div>
+
+<!-- 
+    ①試合結果サマリ
+    試合数、勝ち数、負け数、勝率、獲得ゲーム数、喪失ゲーム数、完封率(定義...)、獲得ポイント、喪失ポイント
+    各ゲームでの取得/喪失ゲーム比(棒グラフ)、勝ちゲーム時の点差(2,3,4,5以上)、負けゲーム時の点差(2,3,4,5以上)
+    レダーチャート(ゲーム毎平均サービスエース数、ゲーム毎平均レシーブエース数、ポイント毎ラリー数、サービス時のポイント獲得率、レシーブ時のポイント獲得率、5連続ポイント取得ゲーム率)
+    サービス時のラリー数別得失点分布、レシーブ時のラリー数別得失点分布
+    試合ごとの成績
+ -->
