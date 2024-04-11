@@ -182,12 +182,12 @@ export class DashboardComponent implements OnInit {
   downloadCSV(){
     // TODO: ディレクトリ指定でファイル取得したい
     const fileDirList = [
-      '../assets/csv/game1.csv',
-      '../assets/csv/game2.csv',
-      '../assets/csv/game3.csv',
-      '../assets/csv/game4.csv',
-      '../assets/csv/game5.csv',
-      '../assets/csv/game6.csv'
+      '../assets/csvList/game1.csv',
+      '../assets/csvList/game2.csv',
+      '../assets/csvList/game3.csv',
+      '../assets/csvList/game4.csv',
+      '../assets/csvList/game5.csv',
+      '../assets/csvList/game6.csv'
     ]
 
     for(const fileDir of fileDirList){
