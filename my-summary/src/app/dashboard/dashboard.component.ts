@@ -207,7 +207,7 @@ export class DashboardComponent implements OnInit {
       let tmpAction: action;
       let makingInfo = false;
       this.papa.parse(fileDir,  {
-        newline: '\r\n',
+        newline: '\n',
         delimiter: ',',
         step: (row,i) => {
           console.log(row)
