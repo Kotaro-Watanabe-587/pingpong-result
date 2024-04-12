@@ -210,6 +210,7 @@ export class DashboardComponent implements OnInit {
         newline: '\r\n',
         delimiter: ',',
         step: (row,i) => {
+          console.log(row)
           if(row.data[0] === 'opponent'){
             tmpMatchInfo.opponent = {
               racket: row.data[1],
