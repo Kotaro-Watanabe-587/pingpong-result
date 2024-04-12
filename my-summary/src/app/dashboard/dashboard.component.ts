@@ -182,12 +182,12 @@ export class DashboardComponent implements OnInit {
   downloadCSV(){
     // TODO: ディレクトリ指定でファイル取得したい
     const fileDirList = [
-      '../assets/csvList/game1.csv',
-      '../assets/csvList/game2.csv',
-      '../assets/csvList/game3.csv',
-      '../assets/csvList/game4.csv',
-      '../assets/csvList/game5.csv',
-      '../assets/csvList/game6.csv'
+      'https://github.com/Kotaro-Watanabe-587/pingpong-result/blob/main/my-summary/src/assets/csvList/game1.csv',
+      'https://github.com/Kotaro-Watanabe-587/pingpong-result/blob/main/my-summary/src/assets/csvList/game2.csv',
+      'https://github.com/Kotaro-Watanabe-587/pingpong-result/blob/main/my-summary/src/assets/csvList/game3.csv',
+      'https://github.com/Kotaro-Watanabe-587/pingpong-result/blob/main/my-summary/src/assets/csvList/game4.csv',
+      'https://github.com/Kotaro-Watanabe-587/pingpong-result/blob/main/my-summary/src/assets/csvList/game5.csv',
+      'https://github.com/Kotaro-Watanabe-587/pingpong-result/blob/main/my-summary/src/assets/csvList/game5.csv',
     ]
 
     for(const fileDir of fileDirList){
