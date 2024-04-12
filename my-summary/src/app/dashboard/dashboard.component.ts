@@ -187,6 +187,7 @@ export class DashboardComponent implements OnInit {
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game3.csv',
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game4.csv',
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game5.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game6.csv',
     ]
 
     for(const fileDir of fileDirList){
