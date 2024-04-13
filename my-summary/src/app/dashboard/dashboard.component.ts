@@ -6,6 +6,8 @@ import * as _ from 'lodash';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
+import { DatePipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 
 // import { readdirSync } from 'node:fs';
 
@@ -13,7 +15,10 @@ import { ChartModule } from 'primeng/chart';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [AppComponent, CardModule, TableModule, ChartModule],
+  imports: [
+    AppComponent, CardModule, TableModule, ChartModule,
+    DatePipe, DecimalPipe
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -24,11 +29,15 @@ export class DashboardComponent implements OnInit {
   isDispResult: boolean = false;
 
   matchInfoList: matchInfo[] = [{
+    date: new Date(),
+    title: '',
     opponent: {
       racket: '',
       fore: '',
       back: ''
     },
+    scoreList:[],
+    gameCount: [0,0],
     gameList: []
   }]
 
@@ -36,7 +45,7 @@ export class DashboardComponent implements OnInit {
     totalMatch: 0,
     totalWinMatch: 0,
     totalLoseMatch: 0,
-    PerOfWin: '0%',
+    PerOfWin: 0,
     totalWinGame: 0,
     totalLoseGame: 0,
     totalRunsScored: 0,
@@ -182,21 +191,25 @@ export class DashboardComponent implements OnInit {
   downloadCSV(){
     // TODO: ディレクトリ指定でファイル取得したい
     const fileDirList = [
-      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game1.csv',
-      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game2.csv',
-      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game3.csv',
-      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game4.csv',
-      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game5.csv',
-      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game6.csv',
+      '../../assets/csvList/game1.csv',
+      '../../assets/csvList/game2.csv',
+      '../../assets/csvList/game3.csv',
+      '../../assets/csvList/game4.csv',
+      '../../assets/csvList/game5.csv',
+      '../../assets/csvList/game6.csv'
     ]
 
     for(const fileDir of fileDirList){
       let tmpMatchInfo: matchInfo = {
+        date: new Date(),
+        title: '',
         opponent: {
           racket: '',
           fore: '',
           back: ''
         },
+        scoreList: [],
+        gameCount: [0,0],
         gameList: []
       }
       let tmpGameInfo: gameInfo = {
@@ -208,16 +221,24 @@ export class DashboardComponent implements OnInit {
       let tmpAction: action;
       let makingInfo = false;
       this.papa.parse(fileDir,  {
-        newline: '\n',
+        newline: '\r\n',
         delimiter: ',',
         step: (row,i) => {
           console.log(row)
-          if(row.data[0] === 'opponent'){
+          if(row.data[0] === 'date'){
+            const year = row.data[1].slice(0,4)
+            const month = row.data[1].slice(4,6)
+            const date = row.data[1].slice(6,8)
+            console.log(year, month, date)
+            tmpMatchInfo.date = new Date(Number(year), Number(month)-1, date)
+          }else if(row.data[0] === 'opponent'){
             tmpMatchInfo.opponent = {
               racket: row.data[1],
               fore: row.data[2],
               back: row.data[3]
             }
+          }else if(row.data[0] === 'title'){
+            tmpMatchInfo.title = row.data[1];
           }else if(row.data[0] === 'game'){
             tmpGameInfo.gameCount = Number(row.data[1]);
             makingInfo = true;
@@ -260,6 +281,10 @@ export class DashboardComponent implements OnInit {
                   }
                 }
               })
+            }else if(row.data[0] === 'Score'){
+              console.log(row.data)
+              const ScoreList = row.data.filter(Boolean);
+              tmpMatchInfo.scoreList.push(ScoreList[ScoreList.length-1])
             }else if(row.data[0] === ''){
               const pushData = Object.assign(tmpGameInfo)
               tmpMatchInfo.gameList.push(pushData)
@@ -274,6 +299,15 @@ export class DashboardComponent implements OnInit {
         },
         download: true,
         complete: () =>{
+          // gameCountを設定する
+          const lastScore = tmpMatchInfo.scoreList[tmpMatchInfo.scoreList.length-1];
+          const myScore = Number(lastScore.split('-')[0]);
+          const opponentScore = Number(lastScore.split('-')[1]);
+          const winGameCount = 3;
+          const loseGameCount = tmpMatchInfo.scoreList.length - winGameCount;
+
+          tmpMatchInfo.gameCount = myScore < opponentScore ? [loseGameCount, winGameCount] : [winGameCount, loseGameCount];
+
           const pushMatchData = Object.assign(tmpMatchInfo)
           this.matchInfoList.push(pushMatchData)
           this.dataService.subject.next(this.matchInfoList)
@@ -287,7 +321,7 @@ export class DashboardComponent implements OnInit {
       totalMatch: 0,
       totalWinMatch: 0,
       totalLoseMatch: 0,
-      PerOfWin: '0%',
+      PerOfWin: 0,
       totalWinGame: 0,
       totalLoseGame: 0,
       totalRunsScored: 0,
@@ -425,7 +459,7 @@ export class DashboardComponent implements OnInit {
       }
     })
     // 勝率は勝ち数 / 試合数で計算
-    this.displayData.PerOfWin = this.displayData.totalMatch !== 0 ? Math.floor((this.displayData.totalWinMatch / this.displayData.totalMatch) * 100) + '%' : '0%';
+    this.displayData.PerOfWin = this.displayData.totalMatch !== 0 ? this.displayData.totalWinMatch * 100 / this.displayData.totalMatch : 0;
     this.displayDataAry[0] = this.displayData;
     this.dispGameRatioGraph = {
         labels: ['第一ゲーム', '第二ゲーム', '第三ゲーム', '第四ゲーム', '第五ゲーム'],
@@ -509,7 +543,11 @@ interface opponentInfo {
 }
 
 interface matchInfo {
+  date: Date,
+  title: string,
   opponent: opponentInfo,
+  scoreList: string[],
+  gameCount: number[],
   gameList: gameInfo[]
 }
 
@@ -517,7 +555,7 @@ interface summaryData {
   totalMatch: number;
   totalWinMatch: number;
   totalLoseMatch: number;
-  PerOfWin: string;
+  PerOfWin: number;
   totalWinGame: number;
   totalLoseGame: number;
   totalRunsScored: number;

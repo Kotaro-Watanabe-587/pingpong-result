@@ -22,7 +22,7 @@
                     <td>{{data.totalMatch}}</td>
                     <td>{{data.totalWinMatch}}</td>
                     <td>{{data.totalLoseMatch}}</td>
-                    <td>{{data.PerOfWin}}</td>
+                    <td>{{data.PerOfWin | number : '1.0-0'}}%</td>
                     <td>{{data.totalWinGame}}</td>
                     <td>{{data.totalLoseGame}}</td>
                     <td>{{data.totalRunsScored}}</td>
@@ -41,21 +41,48 @@
         
         <p-card header="ラリー詳細" [style]="{ 'max-width': '90vw', 'margin': '20px auto'}">
             <p class="m-0">
-                試合毎平均サービスエース数：{{totalServeScore / (displayData.totalWinGame + displayData.totalLoseGame === 0 ? 1 : displayData.totalWinGame + displayData.totalLoseGame)}}
+                試合毎平均サービスエース数：{{totalServeScore / (displayData.totalWinGame + displayData.totalLoseGame === 0 ? 1 : displayData.totalWinGame + displayData.totalLoseGame) | number: '1.0-2'}}
             </p>
             <p class="m-0">
-                試合毎平均レシーブエース数：{{totalReceiveScore / (displayData.totalWinGame + displayData.totalLoseGame === 0 ? 1 : displayData.totalWinGame + displayData.totalLoseGame)}}
+                試合毎平均レシーブエース数：{{totalReceiveScore / (displayData.totalWinGame + displayData.totalLoseGame === 0 ? 1 : displayData.totalWinGame + displayData.totalLoseGame) | number: '1.0-2'}}
             </p>
             <p class="m-0">
                 得点毎平均ラリー数：{{numOfTotalRally / (displayData.totalRunsScored + displayData.totalRuns === 0 ? 1 : displayData.totalRunsScored + displayData.totalRuns)}}
             </p>
             <p class="m-0">
-                サービス時ポイント獲得率：{{servicePoint.win / (servicePoint.win + servicePoint.lose === 0 ? 1 : servicePoint.win + servicePoint.lose) * 100}}%
+                サービス時ポイント獲得率：{{servicePoint.win / (servicePoint.win + servicePoint.lose === 0 ? 1 : servicePoint.win + servicePoint.lose) * 100 | number: '1.0-2'}}%
             </p>
             <p class="m-0">
-                レシーブ時ポイント獲得率：{{receivePoint.win / (receivePoint.win + receivePoint.lose === 0 ? 1 : receivePoint.win + receivePoint.lose) * 100}}%
+                レシーブ時ポイント獲得率：{{receivePoint.win / (receivePoint.win + receivePoint.lose === 0 ? 1 : receivePoint.win + receivePoint.lose) * 100 | number: '1.0-2'}}%
             </p>
         </p-card>
+        <p-table [value]="matchInfoList" [tableStyle]="{'min-width': '90vw'}">
+            <ng-template pTemplate="caption">
+                <div class="flex align-items-center justify-content-between">
+                    試合リスト
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>日付</th>
+                    <th>試合名</th>
+                    <th>勝敗</th>
+                    <th>点数</th>
+                </tr>                
+            </ng-template>
+            <ng-template pTemplate="body" let-match>
+                <tr>
+                    <td>{{match.date | date:"yyyy/MM/dd" }}</td>
+                    <td>{{match.title}}</td>
+                    <td>{{match.gameCount[0] > match.gameCount[1] ? '勝ち' : '負け'}} {{match.gameCount[0]}}-{{match.gameCount[1]}}</td>
+                    <td>
+                        @for (score of match.scoreList; track score){
+                            {{score}}
+                        }
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
         <!-- <div>
             @for (match of matchInfoList; track match){
                 <p>{{match.opponent.racket}}</p>
