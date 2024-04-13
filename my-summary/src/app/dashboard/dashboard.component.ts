@@ -191,12 +191,12 @@ export class DashboardComponent implements OnInit {
   downloadCSV(){
     // TODO: ディレクトリ指定でファイル取得したい
     const fileDirList = [
-      '../../assets/csvList/game1.csv',
-      '../../assets/csvList/game2.csv',
-      '../../assets/csvList/game3.csv',
-      '../../assets/csvList/game4.csv',
-      '../../assets/csvList/game5.csv',
-      '../../assets/csvList/game6.csv'
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game1.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game2.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game3.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game4.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game5.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game6.csv',
     ]
 
     for(const fileDir of fileDirList){
@@ -221,7 +221,7 @@ export class DashboardComponent implements OnInit {
       let tmpAction: action;
       let makingInfo = false;
       this.papa.parse(fileDir,  {
-        newline: '\r\n',
+        newline: '\n',
         delimiter: ',',
         step: (row,i) => {
           console.log(row)
