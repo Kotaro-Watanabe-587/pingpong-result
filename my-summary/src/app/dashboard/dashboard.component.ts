@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
 import { DatePipe } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 // import { readdirSync } from 'node:fs';
 
@@ -16,7 +17,7 @@ import { DecimalPipe } from '@angular/common';
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    AppComponent, CardModule, TableModule, ChartModule,
+    AppComponent, CardModule, TableModule, ChartModule, RouterModule,
     DatePipe, DecimalPipe
   ],
   templateUrl: './dashboard.component.html',

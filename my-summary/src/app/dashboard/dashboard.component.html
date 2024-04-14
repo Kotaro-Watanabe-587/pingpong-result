@@ -71,7 +71,7 @@
                 </tr>                
             </ng-template>
             <ng-template pTemplate="body" let-match>
-                <tr>
+                <tr routerLink="/details" routerLinkActive="Active">
                     <td>{{match.date | date:"yyyy/MM/dd" }}</td>
                     <td>{{match.title}}</td>
                     <td>{{match.gameCount[0] > match.gameCount[1] ? '勝ち' : '負け'}} {{match.gameCount[0]}}-{{match.gameCount[1]}}</td>
