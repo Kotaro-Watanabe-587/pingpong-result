@@ -1,9 +1,9 @@
 <div class="main">
-    @if(!isDispResult){
+    @if(!isDispResult) {
         <button (click)="setDisplayData()">display</button>
-    }
-
-    @if(isDispResult){
+        <h3>get PingPong match result</h3>
+        <h3>let's click "display" button!</h3>
+    } @else {
         <p-table [value]="displayDataAry" [tableStyle]="{ 'max-width': '90vw','margin': 'auto' }">
             <ng-template pTemplate="header">
                 <tr>
@@ -41,10 +41,10 @@
         
         <p-card header="ラリー詳細" [style]="{ 'max-width': '90vw', 'margin': '20px auto'}">
             <p class="m-0">
-                試合毎平均サービスエース数：{{totalServeScore / (displayData.totalWinGame + displayData.totalLoseGame === 0 ? 1 : displayData.totalWinGame + displayData.totalLoseGame) | number: '1.0-2'}}
+                試合毎平均サービスエース数：{{totalServeScore / (displayData.totalWinMatch + displayData.totalLoseMatch === 0 ? 1 : displayData.totalWinMatch + displayData.totalLoseMatch) | number: '1.0-2'}}
             </p>
             <p class="m-0">
-                試合毎平均レシーブエース数：{{totalReceiveScore / (displayData.totalWinGame + displayData.totalLoseGame === 0 ? 1 : displayData.totalWinGame + displayData.totalLoseGame) | number: '1.0-2'}}
+                試合毎平均レシーブエース数：{{totalReceiveScore / (displayData.totalWinMatch + displayData.totalLoseMatch === 0 ? 1 : displayData.totalWinMatch + displayData.totalLoseMatch) | number: '1.0-2'}}
             </p>
             <p class="m-0">
                 得点毎平均ラリー数：{{numOfTotalRally / (displayData.totalRunsScored + displayData.totalRuns === 0 ? 1 : displayData.totalRunsScored + displayData.totalRuns)}}
@@ -64,6 +64,7 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
+                    <th>ID</th>
                     <th>日付</th>
                     <th>試合名</th>
                     <th>勝敗</th>
@@ -71,7 +72,8 @@
                 </tr>                
             </ng-template>
             <ng-template pTemplate="body" let-match>
-                <tr routerLink="/details" routerLinkActive="Active">
+                <tr routerLink="/details/{{match.id}}" routerLinkActive="Active">
+                    <td>{{match.id}}</td>
                     <td>{{match.date | date:"yyyy/MM/dd" }}</td>
                     <td>{{match.title}}</td>
                     <td>{{match.gameCount[0] > match.gameCount[1] ? '勝ち' : '負け'}} {{match.gameCount[0]}}-{{match.gameCount[1]}}</td>
@@ -93,10 +95,6 @@
                 }
             }
         </div> -->
-    }
-    @else {
-        <h3>get PingPong match result</h3>
-        <h3>let's click "display" button!</h3>
     }
 </div>
 

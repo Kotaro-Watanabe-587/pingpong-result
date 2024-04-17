@@ -1,1 +1,113 @@
-<p>detail works!</p>
+<!-- <p-card header="Gamematch">
+    <p>
+        {{displayData.gameCount[0]}} - {{displayData.gameCount[1]}}
+    </p>
+    <p>
+        score
+    </p>
+    @for (score of displayData.scoreList; track score) {
+        <p>
+            {{score}}
+        </p>
+    }
+</p-card> -->
+
+<p-card header="試合詳細" [style]="{'text-align': 'center'}">
+    <p-tabView>
+        @for (game of dispScoreTransition; track game; let idx=$index ){
+            <p-tabPanel header="{{idx+1}}Game">
+                <table class="score-table">
+                    <tr>
+                        <th></th>
+                        <th>自得点</th>
+                        <th>相手得点</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            総得点
+                        </td>
+                        <td class="score">
+                            {{matchDetail.myScore.gameList[idx].totalScore}}
+                        </td>
+                        <td class="score">
+                            {{matchDetail.opponentScore.gameList[idx].totalScore}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            サービス時獲得ポイント
+                        </td>
+                        <td class="score">
+                            {{matchDetail.myScore.gameList[idx].serviceScore}}
+                        </td>
+                        <td class="score">
+                            {{matchDetail.opponentScore.gameList[idx].serviceScore}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            サービス時喪失ポイント
+                        </td>
+                        <td class="score">
+                            {{matchDetail.myScore.gameList[idx].serviceOpponentScore}}
+                        </td>
+                        <td class="score">
+                            {{matchDetail.opponentScore.gameList[idx].serviceOpponentScore}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            レシーブ時獲得ポイント
+                        </td>
+                        <td class="score">
+                            {{matchDetail.myScore.gameList[idx].recieveScore}}
+                        </td>
+                        <td class="score">
+                            {{matchDetail.opponentScore.gameList[idx].recieveScore}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            レシーブ時喪失ポイント
+                        </td>
+                        <td class="score">
+                            {{matchDetail.myScore.gameList[idx].recieveOpponentScore}}
+                        </td>
+                        <td class="score">
+                            {{matchDetail.opponentScore.gameList[idx].recieveOpponentScore}}
+                        </td>
+                    </tr>
+                </table>
+                <!-- <div>
+                    <p>
+                        総得点 {{matchDetail.myScore.gameList[idx].totalScore}}:{{matchDetail.opponentScore.gameList[idx].totalScore}}
+                    </p>
+                    <p>
+                        サービス時獲得ポイント {{matchDetail.myScore.gameList[idx].serviceScore}}:{{matchDetail.opponentScore.gameList[idx].serviceScore}}
+                    </p>
+                    <p>
+                        サービス時喪失ポイント {{matchDetail.myScore.gameList[idx].serviceOpponentScore}}:{{matchDetail.opponentScore.gameList[idx].serviceOpponentScore}}
+                    </p>
+                    <p>
+                        レシーブ時獲得ポイント{{matchDetail.myScore.gameList[idx].recieveOpponentScore}}:{{matchDetail.opponentScore.gameList[idx].recieveOpponentScore}}
+                    </p>
+                    <p>
+                        レシーブ時喪失ポイント{{matchDetail.myScore.gameList[idx].recieveScore}}:{{matchDetail.opponentScore.gameList[idx].recieveScore}}
+                    </p>
+                </div> -->
+                <p-chart type="line" [data]="dispScoreTransition[idx]" [options]="scoreChartOptions" width="70vw" class="transition-chart"></p-chart>
+            </p-tabPanel>
+    
+    
+        }
+    </p-tabView>
+</p-card>
+
+<p-button routerLink="/" routerLinkActive="Active" label="ダッシュボードへ戻る" severity="secondary" size="small"></p-button>
+
+
+<!-- <div>
+    @for (game of dispScoreTransition; track game; let idx=$index ){
+        <div (click)="changeDisplayChart(idx)">{{idx+1}}Game</div>
+    }
+</div> -->

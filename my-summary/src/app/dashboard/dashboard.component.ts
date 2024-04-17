@@ -9,6 +9,7 @@ import { ChartModule } from 'primeng/chart';
 import { DatePipe } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ScoreDifference, ScoreDifferenceGraph, action, gameInfo, getGameRatio, getGameRatioGraph, matchInfo, pointInfo, rallyDataGraph, rallyScore, summaryData } from '../interfaces/interface';
 
 // import { readdirSync } from 'node:fs';
 
@@ -29,18 +30,7 @@ export class DashboardComponent implements OnInit {
   Papa: Papa;
   isDispResult: boolean = false;
 
-  matchInfoList: matchInfo[] = [{
-    date: new Date(),
-    title: '',
-    opponent: {
-      racket: '',
-      fore: '',
-      back: ''
-    },
-    scoreList:[],
-    gameCount: [0,0],
-    gameList: []
-  }]
+  matchInfoList: matchInfo[] = []
 
   displayData: summaryData = {
     totalMatch: 0,
@@ -139,29 +129,7 @@ export class DashboardComponent implements OnInit {
   readonly seekBaseDir = "../assets/csv";
   // readonly files = readdirSync(this.seekBaseDir);
 
-  readonly gameRatioChartOption = { 
-    indexAxis: 'y',
-    scales: {
-      x: {
-        stacked: true,
-        
-      },
-      y: {
-        stacked: true
-      },
-      yAxes:{
-        display: false
-      }
-    },
-    plugins:{
-      title:{
-        display: true,
-        text: 'ゲーム毎の勝敗比率',
-        font: {size: 20}
-      }
-    }
-  }
-
+  gameRatioChartOption = {}
   readonly scoreDiffWinChartOption = {
     plugins:{
       title:{
@@ -191,7 +159,7 @@ export class DashboardComponent implements OnInit {
 
   downloadCSV(){
     // TODO: ディレクトリ指定でファイル取得したい
-    const fileDirList = [
+    const testfileDirList = [
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game1.csv',
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game2.csv',
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game3.csv',
@@ -199,9 +167,18 @@ export class DashboardComponent implements OnInit {
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game5.csv',
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game6.csv',
     ]
+    const fileDirList = [
+      '../../assets/csvList/game1.csv',
+      '../../assets/csvList/game2.csv',
+      '../../assets/csvList/game3.csv',
+      '../../assets/csvList/game4.csv',
+      '../../assets/csvList/game5.csv',
+      '../../assets/csvList/game6.csv'
+    ]
 
     for(const fileDir of fileDirList){
       let tmpMatchInfo: matchInfo = {
+        id: 0,
         date: new Date(),
         title: '',
         opponent: {
@@ -222,7 +199,7 @@ export class DashboardComponent implements OnInit {
       let tmpAction: action;
       let makingInfo = false;
       this.papa.parse(fileDir,  {
-        newline: '\n',
+        newline: '\r\n',
         delimiter: ',',
         step: (row,i) => {
           console.log(row)
@@ -308,10 +285,11 @@ export class DashboardComponent implements OnInit {
           const loseGameCount = tmpMatchInfo.scoreList.length - winGameCount;
 
           tmpMatchInfo.gameCount = myScore < opponentScore ? [loseGameCount, winGameCount] : [winGameCount, loseGameCount];
+          tmpMatchInfo.id = this.matchInfoList.length + 1;
 
           const pushMatchData = Object.assign(tmpMatchInfo)
           this.matchInfoList.push(pushMatchData)
-          this.dataService.subject.next(this.matchInfoList)
+          this.dataService.add(this.matchInfoList);
         }
       })
     }
@@ -350,11 +328,11 @@ export class DashboardComponent implements OnInit {
             if(val.gamePointList.length >= 22){
               this.dispScoreDifference.win.two++;           
             }else{
-              if(val.gamePointList.length - 11 === 2){
+              if(val.gamePointList.length - 11 === 9){
                 this.dispScoreDifference.win.two++
-              }else if(val.gamePointList.length - 11 === 3){
+              }else if(val.gamePointList.length - 11 === 8){
                 this.dispScoreDifference.win.three++
-              }else if(val.gamePointList.length - 11 === 4){
+              }else if(val.gamePointList.length - 11 === 7){
                 this.dispScoreDifference.win.four++
               }else{
                 this.dispScoreDifference.win.over++
@@ -366,11 +344,11 @@ export class DashboardComponent implements OnInit {
             if(val.gamePointList.length >= 22){
               this.dispScoreDifference.lose.two++;           
             }else{
-              if(val.gamePointList.length - 11 === 2){
+              if(val.gamePointList.length - 11 === 9){
                 this.dispScoreDifference.lose.two++
-              }else if(val.gamePointList.length - 11 === 3){
+              }else if(val.gamePointList.length - 11 === 8){
                 this.dispScoreDifference.lose.three++
-              }else if(val.gamePointList.length - 11 === 4){
+              }else if(val.gamePointList.length - 11 === 7){
                 this.dispScoreDifference.lose.four++
               }else{
                 this.dispScoreDifference.lose.over++
@@ -466,13 +444,35 @@ export class DashboardComponent implements OnInit {
         labels: ['第一ゲーム', '第二ゲーム', '第三ゲーム', '第四ゲーム', '第五ゲーム'],
         datasets:[{
           label: 'win',
-          data: this.dispGameRatio.map(v => {return v.win})
+          data: this.dispGameRatio.map(v => {return v.win / (v.win + v.lose === 0 ? 1 : v.win + v.lose)})
         },
         {
           label: 'lose',
-          data: this.dispGameRatio.map(v => {return v.lose})
+          data: this.dispGameRatio.map(v => {return v.lose / (v.win + v.lose === 0 ? 1 : v.win + v.lose)})
         },
       ],
+    }
+    this.gameRatioChartOption = { 
+      indexAxis: 'y',
+      scales: {
+        x: {
+          stacked: true,
+          
+        },
+        y: {
+          stacked: true
+        },
+        yAxes:{
+          display: false
+        }
+      },
+      plugins:{
+        title:{
+          display: true,
+          text: 'ゲーム毎の勝敗比率',
+          font: {size: 20}
+        },
+      }
     }
     this.dispScoreDifferenceWinGraph = {
       labels: ['2点差', '3点差','4点差','5点差以上'],
@@ -504,120 +504,4 @@ export class DashboardComponent implements OnInit {
     }
     this.isDispResult = true
   }
-}
-
-enum spinKind {
-  t = 0,
-  u = 1,
-  s = 2,
-  k = 3
-}
-
-enum shotKind{
-  D = 0,
-  S = 1
-}
-
-interface action {
-  isFore: boolean; // フォアならtrue、バックならfalse
-  isServiceMiss: boolean; // サービスミスならtrue、それ以外がfalse
-  spinDirection: string;
-  shotType: string;
-}
-
-interface pointInfo {
-  getMyPoint: boolean; // trueなら自得点、falseなら相手
-  rallyCount: number; // ラリー数
-  lastMyAction: action; // ラリー最後の自身の行動
-}
-
-interface gameInfo {
-  gamePointList: pointInfo[];
-  gameCount: number; // ゲーム数(1～5)
-  isServe: boolean; //サービス権持ってのスタートか。持っていたらtrue
-}
-
-interface opponentInfo {
-  racket: string; // シェークorペン
-  fore: string; // フォアラバーの種類
-  back: string; // バックラバーの種類
-}
-
-interface matchInfo {
-  date: Date,
-  title: string,
-  opponent: opponentInfo,
-  scoreList: string[],
-  gameCount: number[],
-  gameList: gameInfo[]
-}
-
-interface summaryData {
-  totalMatch: number;
-  totalWinMatch: number;
-  totalLoseMatch: number;
-  PerOfWin: number;
-  totalWinGame: number;
-  totalLoseGame: number;
-  totalRunsScored: number;
-  totalRuns: number;
-}
-
-interface getGameRatio {
-  win: number;
-  lose: number
-}
-interface getGameRatioGraph {
-  labels: string[];
-  datasets: {
-    label: string;
-    data: any;
-  }[]
-}
-
-interface scoreKind {
-  two: number;
-  three: number;
-  four: number;
-  over: number  
-}
-interface ScoreDifference {
-  win: scoreKind;
-  lose: scoreKind
-}
-
-interface ScoreDifferenceGraph{
-  labels: string[];
-  datasets:{
-    label:string;
-    data: any;
-  }[]
-}
-
-interface rallyDataGraph{
-  labels: string[];
-  datasets:{
-    label:string;
-    data: any;
-  }[]
-}
-
-interface rallyScore {
-  win:number;
-  lose: number;
-}
-
-interface rallyDistribution{
-    '0': rallyScore;
-    '1': rallyScore;
-    '2': rallyScore;
-    '3': rallyScore;
-    '4': rallyScore;
-    '5': rallyScore;
-    '6': rallyScore;
-    '7': rallyScore;
-    '8': rallyScore;
-    '9': rallyScore;
-    '10': rallyScore;
-    '11': rallyScore
 }
