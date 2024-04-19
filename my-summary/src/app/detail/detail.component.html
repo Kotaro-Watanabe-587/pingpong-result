@@ -11,7 +11,6 @@
         </p>
     }
 </p-card> -->
-
 <p-card header="試合詳細" [style]="{'text-align': 'center'}">
     <p-tabView>
         @for (game of dispScoreTransition; track game; let idx=$index ){
@@ -102,6 +101,16 @@
         }
     </p-tabView>
 </p-card>
+
+<google-map
+    height="500px"
+    width="500px"
+    [center]="center"
+    [zoom]="zoom"
+    [options]="options"
+>
+<map-marker [position]="markerPositions" [options]="markerOptions"></map-marker>
+</google-map>
 
 <p-button routerLink="/" routerLinkActive="Active" label="ダッシュボードへ戻る" severity="secondary" size="small"></p-button>
 

@@ -9,11 +9,12 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TabViewModule } from 'primeng/tabview';
 import { TableModule } from 'primeng/table';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @Component({
   selector: 'app-detail',
   standalone: true,
-  imports: [RouterModule, ChartModule, ButtonModule, CardModule, TabViewModule, TableModule],
+  imports: [RouterModule, ChartModule, ButtonModule, CardModule, TabViewModule, TableModule, GoogleMapsModule],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
 })
@@ -69,6 +70,21 @@ export class DetailComponent implements OnInit{
   }
 
   chartIndex: number = 0;
+
+  zoom = 16;
+
+  center: google.maps.LatLngLiteral = {
+    lat: 35.77538889,
+    lng: 139.73554
+  };
+
+  options: google.maps.MapOptions = {
+    disableDefaultUI: true
+  };
+
+  markerOptions: google.maps.MarkerOptions = {draggable: false};
+  markerPositions: google.maps.LatLngLiteral = this.center;
+
 
   constructor(
     private dataService: DataService,
