@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
 
   gameList: string[] = [];
   Papa: Papa;
-  isDispResult: boolean = false;
+  isDispResult: boolean = this.dataService.matchData[0].gameList.length > 0;
 
   matchInfoList: matchInfo[] = []
 
@@ -156,6 +156,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.downloadCSV();
+    if(this.isDispResult){
+      this.matchInfoList = this.dataService.getMatchData();
+      this.setDisplayData()
+    }
+  }
+
   }
 
   downloadCSV(){
