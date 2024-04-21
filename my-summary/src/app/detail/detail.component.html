@@ -12,6 +12,24 @@
     }
 </p-card> -->
 <p-card header="試合詳細" [style]="{'text-align': 'center'}">
+    <div class="top-data">
+        <p-card>
+            <p>試合会場：赤羽体育館</p>
+            <p>試合名：{{displayData.title}}</p>
+            <p>試合日：{{displayData.date | date : 'yyyy年MM月dd日'}}</p>
+            <p>相手用具</p>
+            <p>ラケット：{{displayData.opponent.racket}} / フォアラバー：{{displayData.opponent.fore}}{{displayData.opponent.back === '-' ? '' : ' / バックラバー：'+displayData.opponent.back}}</p>
+        </p-card>
+            <google-map
+                height="{{mapHeight}}px"
+                width="{{mapWidth}}px"
+                [center]="center"
+                [zoom]="zoom"
+                [options]="options"
+            >
+            <map-marker [position]="markerPositions" [options]="markerOptions"></map-marker>
+        </google-map>    
+    </div>
     <p-tabView>
         @for (game of dispScoreTransition; track game; let idx=$index ){
             <p-tabPanel header="{{idx+1}}Game">
@@ -101,16 +119,6 @@
         }
     </p-tabView>
 </p-card>
-
-<google-map
-    height="500px"
-    width="500px"
-    [center]="center"
-    [zoom]="zoom"
-    [options]="options"
->
-<map-marker [position]="markerPositions" [options]="markerOptions"></map-marker>
-</google-map>
 
 <p-button routerLink="/" routerLinkActive="Active" label="ダッシュボードへ戻る" severity="secondary" size="small"></p-button>
 

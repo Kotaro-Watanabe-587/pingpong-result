@@ -10,11 +10,12 @@ import { CardModule } from 'primeng/card';
 import { TabViewModule } from 'primeng/tabview';
 import { TableModule } from 'primeng/table';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-detail',
   standalone: true,
-  imports: [RouterModule, ChartModule, ButtonModule, CardModule, TabViewModule, TableModule, GoogleMapsModule],
+  imports: [RouterModule, ChartModule, ButtonModule, CardModule, TabViewModule, TableModule, GoogleMapsModule, DatePipe],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
 })
@@ -88,6 +89,9 @@ export class DetailComponent implements OnInit{
       }
     }
   }
+
+  readonly mapHeight = 300;
+  readonly mapWidth = 300;
 
   chartIndex: number = 0;
 

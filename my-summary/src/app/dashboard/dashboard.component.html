@@ -7,26 +7,32 @@
         <p-table [value]="displayDataAry" [tableStyle]="{ 'max-width': '90vw','margin': 'auto' }">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>試合数</th>
-                    <th>勝ち数</th>
-                    <th>負け数</th>
-                    <th>勝率</th>
-                    <th>獲得ゲーム数</th>
-                    <th>喪失ゲーム数</th>
-                    <th>獲得ポイント数</th>
-                    <th>喪失ポイント数</th>
+                    <th colspan="8">
+                        <p style="margin: auto; text-align: center; font-size: 20px; color:rgba(255, 255, 255, 0.6)">
+                            サマリー
+                        </p>
+                    </th>
+                <tr>
+                    <th style="text-align: center;">試合数</th>
+                    <th style="text-align: center;">勝ち数</th>
+                    <th style="text-align: center;">負け数</th>
+                    <th style="text-align: center;">勝率</th>
+                    <th style="text-align: center;">獲得ゲーム数</th>
+                    <th style="text-align: center;">喪失ゲーム数</th>
+                    <th style="text-align: center;">獲得ポイント数</th>
+                    <th style="text-align: center;">喪失ポイント数</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-data>
                 <tr>
-                    <td>{{data.totalMatch}}</td>
-                    <td>{{data.totalWinMatch}}</td>
-                    <td>{{data.totalLoseMatch}}</td>
-                    <td>{{data.PerOfWin | number : '1.0-0'}}%</td>
-                    <td>{{data.totalWinGame}}</td>
-                    <td>{{data.totalLoseGame}}</td>
-                    <td>{{data.totalRunsScored}}</td>
-                    <td>{{data.totalRuns}}</td>
+                    <td style="text-align: right;">{{data.totalMatch}}</td>
+                    <td style="text-align: right;">{{data.totalWinMatch}}</td>
+                    <td style="text-align: right;">{{data.totalLoseMatch}}</td>
+                    <td style="text-align: right;">{{data.PerOfWin | number : '1.0-0'}}%</td>
+                    <td style="text-align: right;">{{data.totalWinGame}}</td>
+                    <td style="text-align: right;">{{data.totalLoseGame}}</td>
+                    <td style="text-align: right;">{{data.totalRunsScored}}</td>
+                    <td style="text-align: right;">{{data.totalRuns}}</td>
                 </tr>
             </ng-template>
         </p-table>
@@ -47,7 +53,7 @@
                 試合毎平均レシーブエース数：{{totalReceiveScore / (displayData.totalWinMatch + displayData.totalLoseMatch === 0 ? 1 : displayData.totalWinMatch + displayData.totalLoseMatch) | number: '1.0-2'}}
             </p>
             <p class="m-0">
-                得点毎平均ラリー数：{{numOfTotalRally / (displayData.totalRunsScored + displayData.totalRuns === 0 ? 1 : displayData.totalRunsScored + displayData.totalRuns)}}
+                得点毎平均ラリー数：{{numOfTotalRally / (displayData.totalRunsScored + displayData.totalRuns === 0 ? 1 : displayData.totalRunsScored + displayData.totalRuns) | number: '1.0-2'}}
             </p>
             <p class="m-0">
                 サービス時ポイント獲得率：{{servicePoint.win / (servicePoint.win + servicePoint.lose === 0 ? 1 : servicePoint.win + servicePoint.lose) * 100 | number: '1.0-2'}}%
@@ -56,13 +62,15 @@
                 レシーブ時ポイント獲得率：{{receivePoint.win / (receivePoint.win + receivePoint.lose === 0 ? 1 : receivePoint.win + receivePoint.lose) * 100 | number: '1.0-2'}}%
             </p>
         </p-card>
-        <p-table [value]="matchInfoList" [tableStyle]="{'min-width': '90vw'}">
-            <ng-template pTemplate="caption">
-                <div class="flex align-items-center justify-content-between">
-                    試合リスト
-                </div>
-            </ng-template>
+        <p-table [value]="matchInfoList" [tableStyle]="{ 'max-width': '90vw','margin': 'auto' }">
             <ng-template pTemplate="header">
+                <tr>
+                    <th colspan="8">
+                        <p style="margin: auto; text-align: center; font-size: 20px; color:rgba(255, 255, 255, 0.6)">
+                            サマリー
+                        </p>
+                    </th>
+                </tr>
                 <tr>
                     <th>ID</th>
                     <th>日付</th>
