@@ -56,7 +56,8 @@ export class DashboardComponent implements OnInit {
     datasets:[
       {
         label: '',
-        data: undefined
+        data: undefined,
+        subData: undefined
       }
     ]
   }
@@ -444,11 +445,13 @@ export class DashboardComponent implements OnInit {
         labels: ['第一ゲーム', '第二ゲーム', '第三ゲーム', '第四ゲーム', '第五ゲーム'],
         datasets:[{
           label: 'win',
-          data: this.dispGameRatio.map(v => {return v.win / (v.win + v.lose === 0 ? 1 : v.win + v.lose)})
+          data: this.dispGameRatio.map(v => {return v.win / (v.win + v.lose === 0 ? 1 : v.win + v.lose)}),
+          subData: this.dispGameRatio.map(v => {return v.win + v.lose})
         },
         {
           label: 'lose',
-          data: this.dispGameRatio.map(v => {return v.lose / (v.win + v.lose === 0 ? 1 : v.win + v.lose)})
+          data: this.dispGameRatio.map(v => {return v.lose / (v.win + v.lose === 0 ? 1 : v.win + v.lose)}),
+          subData: this.dispGameRatio.map(v => {return v.win + v.lose})
         },
       ],
     }
@@ -472,6 +475,16 @@ export class DashboardComponent implements OnInit {
           text: 'ゲーム毎の勝敗比率',
           font: {size: 20}
         },
+        tooltip: {
+          callbacks: {
+            label: function(context: any){
+             let label = context.dataset.label;
+             const gameNum = context.dataset.subData[context.dataIndex];
+             label += ': ' + context.dataset.data[context.dataIndex] * gameNum
+             return label
+            }
+          }
+        }
       }
     }
     this.dispScoreDifferenceWinGraph = {

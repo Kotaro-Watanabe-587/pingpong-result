@@ -66,6 +66,7 @@ export interface getGameRatioGraph {
     datasets: {
         label: string;
         data: any;
+        subData: any
     }[]
 }
   

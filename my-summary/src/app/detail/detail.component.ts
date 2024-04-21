@@ -66,7 +66,27 @@ export class DetailComponent implements OnInit{
   dispScoreTransition: getGameRatioGraph[] = [];
 
   readonly scoreChartOptions = {
-
+    plugins:{
+      title:{
+        display: true,
+        text: 'スコアグラフ',
+        font: {size: 20}
+      },
+      tooltip: {
+        callbacks: {
+          title: function(context: any){
+            let label = context.length > 0 ? context[0].label : context.label;
+            label = '合計 ' + label + ' 得点目'
+            return label
+          },
+          label: function(context: any){
+            let label = context.dataset.label;
+            label += ': ' + context.dataset.data[context.dataIndex]
+            return label
+          }
+        }
+      }
+    }
   }
 
   chartIndex: number = 0;
@@ -223,11 +243,13 @@ export class DetailComponent implements OnInit{
         datasets:[
           {
             label: 'myScore',
-            data: v.scoreTransition
+            data: v.scoreTransition,
+            subData: undefined
           },
           {
             label: 'opponentScore',
-            data: this.matchDetail.opponentScore.gameList[i].scoreTransition
+            data: this.matchDetail.opponentScore.gameList[i].scoreTransition,
+            subData: undefined
           }
         ]
       }
