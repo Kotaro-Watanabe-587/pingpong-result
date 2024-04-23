@@ -15,6 +15,11 @@ export class DataService {
       id: 0,
       date: new Date(),
       title: '',
+      place: {
+        name: '',
+        latitude: 0,
+        longitude: 0
+      },
       opponent:{
         racket: '',
         fore: '',

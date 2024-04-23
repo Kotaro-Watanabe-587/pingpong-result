@@ -180,7 +180,9 @@ export class DashboardComponent implements OnInit {
       '../../assets/csvList/game3.csv',
       '../../assets/csvList/game4.csv',
       '../../assets/csvList/game5.csv',
-      '../../assets/csvList/game6.csv'
+      '../../assets/csvList/game6.csv',
+      '../../assets/csvList/game7.csv',
+      '../../assets/csvList/game8.csv',
     ]
 
     for(const fileDir of fileDirList){
@@ -188,6 +190,11 @@ export class DashboardComponent implements OnInit {
         id: 0,
         date: new Date(),
         title: '',
+        place: {
+          name: '',
+          latitude: 0,
+          longitude: 0
+        },
         opponent: {
           racket: '',
           fore: '',
@@ -209,12 +216,10 @@ export class DashboardComponent implements OnInit {
         newline: '\r\n',
         delimiter: ',',
         step: (row,i) => {
-          console.log(row)
           if(row.data[0] === 'date'){
             const year = row.data[1].slice(0,4)
             const month = row.data[1].slice(4,6)
             const date = row.data[1].slice(6,8)
-            console.log(year, month, date)
             tmpMatchInfo.date = new Date(Number(year), Number(month)-1, date)
           }else if(row.data[0] === 'opponent'){
             tmpMatchInfo.opponent = {
@@ -224,6 +229,12 @@ export class DashboardComponent implements OnInit {
             }
           }else if(row.data[0] === 'title'){
             tmpMatchInfo.title = row.data[1];
+          }else if(row.data[0] === 'place'){
+            tmpMatchInfo.place = {
+              name: row.data[1],
+              latitude: Number(row.data[2]),
+              longitude: Number(row.data[3]),
+            } ;
           }else if(row.data[0] === 'game'){
             tmpGameInfo.gameCount = Number(row.data[1]);
             makingInfo = true;
@@ -267,7 +278,6 @@ export class DashboardComponent implements OnInit {
                 }
               })
             }else if(row.data[0] === 'Score'){
-              console.log(row.data)
               const ScoreList = row.data.filter(Boolean);
               tmpMatchInfo.scoreList.push(ScoreList[ScoreList.length-1])
             }else if(row.data[0] === ''){

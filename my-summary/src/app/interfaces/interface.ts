@@ -39,6 +39,11 @@ export interface matchInfo {
     id: number,
     date: Date,
     title: string,
+    place: {
+        name: string,
+        latitude: number
+        longitude: number,
+    },
     opponent: opponentInfo,
     scoreList: string[],
     gameCount: number[],

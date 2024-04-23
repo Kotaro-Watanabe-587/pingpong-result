@@ -26,6 +26,11 @@ export class DetailComponent implements OnInit{
     id: 0,
     date: new Date(),
     title: '',
+    place: {
+      name: '',
+      latitude: 0,
+      longitude: 0
+    },
     opponent: {
       racket: '',
       fore: '',
@@ -97,17 +102,28 @@ export class DetailComponent implements OnInit{
 
   zoom = 16;
 
-  center: google.maps.LatLngLiteral = {
+  options: google.maps.MapOptions = {
+    disableDefaultUI: true,
+    center:{
     lat: 35.77538889,
     lng: 139.73554
+    },
+    mapId: '691b3576c1759bb5'
   };
 
-  options: google.maps.MapOptions = {
-    disableDefaultUI: true
+  markerPositions: google.maps.LatLngLiteral = {
+    lat: 35,
+    lng: 135
   };
 
-  markerOptions: google.maps.MarkerOptions = {draggable: false};
-  markerPositions: google.maps.LatLngLiteral = this.center;
+  markerOptions: google.maps.marker.AdvancedMarkerElementOptions = {
+    position:{
+      lat: 35,
+      lng: 135
+    }
+  };
+
+  mapID = '691b3576c1759bb5'
 
 
   constructor(
@@ -133,7 +149,22 @@ export class DetailComponent implements OnInit{
     this.matchData = this.dataService.getMatchData();
     const index = this.matchData.findIndex(v => v.id === id)
     this.displayData = index > -1 ? this.matchData[index] : this.matchData[0]
-    console.log(this.displayData)
+    this.options = {
+      center:{
+        lat: this.displayData.place.latitude,
+        lng: this.displayData.place.longitude        
+      }
+    }
+    this.markerPositions = {
+      lat: this.displayData.place.latitude,
+      lng: this.displayData.place.longitude
+    };
+    this.markerOptions = {
+      position:{
+        lat: this.displayData.place.latitude,
+        lng: this.displayData.place.longitude
+      }
+    }
   }
 
   setDetailData(): void{
