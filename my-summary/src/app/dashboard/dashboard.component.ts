@@ -162,6 +162,8 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  getHeros(): void {
+    this.matchInfoList = this.dataService.getMatchData();
   }
 
   downloadCSV(){
@@ -305,8 +307,10 @@ export class DashboardComponent implements OnInit {
           tmpMatchInfo.id = this.matchInfoList.length + 1;
 
           const pushMatchData = Object.assign(tmpMatchInfo)
-          this.matchInfoList.push(pushMatchData)
-          this.dataService.add(this.matchInfoList);
+          if(this.matchInfoList.findIndex(v => v.date.toString() === pushMatchData.date.toString() && v.title === pushMatchData.title) === -1){
+            this.matchInfoList.push(pushMatchData)
+            this.dataService.add(this.matchInfoList);  
+          }
         }
       })
     }
