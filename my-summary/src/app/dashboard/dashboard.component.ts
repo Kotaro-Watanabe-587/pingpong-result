@@ -175,6 +175,12 @@ export class DashboardComponent implements OnInit {
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game4.csv',
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game5.csv',
       'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game6.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game7.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game8.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game9.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game10.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game11.csv',
+      'https://kotaro-watanabe-587.github.io/pingpong-result/assets/csvList/game12.csv',
     ]
     const fileDirList = [
       '../../assets/csvList/game1.csv',
@@ -185,6 +191,10 @@ export class DashboardComponent implements OnInit {
       '../../assets/csvList/game6.csv',
       '../../assets/csvList/game7.csv',
       '../../assets/csvList/game8.csv',
+      '../../assets/csvList/game9.csv',
+      '../../assets/csvList/game10.csv',
+      '../../assets/csvList/game11.csv',
+      '../../assets/csvList/game12.csv',
     ]
 
     for(const fileDir of fileDirList){
